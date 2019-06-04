@@ -139,7 +139,7 @@ exports.sendMail = function(req,res){
 
           } else {
 
-            res.json({ success: true , message: "Dirección de correo inválida"});
+            res.json({ success: false , message: "Dirección de correo inválida"});
 
           }
 
