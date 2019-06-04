@@ -1,10 +1,15 @@
+const cool = require('cool-ascii-faces');
+var express = require('express');
+const path = require('path');
+const PORT = process.env.PORT || 5000;
 
-  var express = require('express');
-  var path = require('path');
-  var bodyParser = require('body-parser');
-  var mailRoutes = require('./api/routes/mailRoutes');
+//var path = require('path');
+var bodyParser = require('body-parser');
+var mailRoutes = require('./api/routes/mailRoutes');
 
-  var app = express();
+var app = express();
+
+
       
   app.set('view engine', 'ejs');
   app.use(express.static('public'));
@@ -21,8 +26,10 @@
     //res.render('index');
   });
 
+  app.get('/cool', (req, res) => res.send(cool()))
+
   app.listen(port, function(err){
-    
+
     if (err) {
         console.log(err);
     }
