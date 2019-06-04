@@ -5,10 +5,21 @@ const unirest = require('unirest');
 
 exports.sendMail = function(req,res){
 
-  console.log(req.body);
+  
+  //const cfgEmailHost  = process.env.EMAILHOST || 'mail.ahrensac.com';
+  //const cfgEmailPort  = process.env.EMAILPORT || 465;
+  //const cfgSecure     = process.env.SECURE    || true;
+  //const cfgEmail      = process.env.EMAIL     || 'soporte@ahrensac.com',
+  //const cfgPassword   = process.env.PASSWORD  || '@hrens@c';
+
+  const cfgEmailHost  = process.env.EMAILHOST || null;
+  const cfgEmailPort  = process.env.EMAILPORT || null;
+  const cfgSecure     = process.env.SECURE    || null;
+  const cfgEmail      = process.env.EMAIL     || null;
+  const cfgPassword   = process.env.PASSWORD  || null;
 
   // Parameters
-  let mailSecret  = req.body.secretWord;
+  let mailSecret    = req.body.secretWord;
   let clientEmail   = req.body.clientEmail;
   let clientName    = req.body.clientName;
   let invoiceType   = req.body.invoiceType;
@@ -50,12 +61,12 @@ exports.sendMail = function(req,res){
 
             // Email settings
             const transporter = nodeMailer.createTransport({
-              host: 'mail.ahrensac.com',
-              port: 465,
-              secure: true,  //true for 465 port, false for other ports
+              host: cfgEmailHost,
+              port: cfgEmailPort,
+              secure: cfgSecure,  //true for 465 port, false for other ports
               auth: {
-                user: 'soporte@ahrensac.com',
-                pass: '@hrens@c'
+                user: cfgEmail,
+                pass: cfgPassword
               }
             });
 
@@ -154,7 +165,7 @@ exports.sendMail = function(req,res){
   }
   else{
 
-    res.json({ success: false , message: 'Verifique los parámetros.', response: null});
+    res.json({ success: false , message: 'Verifique los parámetros.'});
 
   }
     
