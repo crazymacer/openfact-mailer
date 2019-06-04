@@ -1,22 +1,24 @@
 'use strict';
 
-const nodeMailer = require('nodemailer');
-const unirest = require('unirest');
+// Required modules
+const nodeMailer  = require('nodemailer');
+const unirest     = require('unirest');
 
+// Function
 exports.sendMail = function(req,res){
 
-  
-  //const cfgEmailHost  = process.env.EMAILHOST || 'mail.ahrensac.com';
-  //const cfgEmailPort  = process.env.EMAILPORT || 465;
-  //const cfgSecure     = process.env.SECURE    || true;
-  //const cfgEmail      = process.env.EMAIL     || 'soporte@ahrensac.com',
-  //const cfgPassword   = process.env.PASSWORD  || '@hrens@c';
-
-  const cfgEmailHost  = process.env.EMAILHOST || null;
-  const cfgEmailPort  = process.env.EMAILPORT || null;
-  const cfgSecure     = process.env.SECURE    || null;
-  const cfgEmail      = process.env.EMAIL     || null;
-  const cfgPassword   = process.env.PASSWORD  || null;
+  // Enviroment variables
+  const cfgEmailHost      = process.env.EMAILHOST     || null;
+  const cfgEmailPort      = process.env.EMAILPORT     || null;
+  const cfgSecure         = process.env.SECURE        || null;
+  const cfgEmail          = process.env.EMAIL         || null;
+  const cfgPassword       = process.env.PASSWORD      || null;
+  const cfgSenderName     = process.env.SENDERNAME    || 'OPENFACT';
+  const cfgSubject        = process.env.SUBJECT       || '[OPENFACT] Emisión de Comprobante Electrónico';
+  const cfgsecretWord     = process.env.SECRETWORD    || 'please';
+  const cfgRapidApiUrl    = process.env.RAPIDAPIURL   || null;
+  const cfgRapidApiHost   = process.env.RAPIDAPIHOST  || null;
+  const cfgRapiApidKey    = process.env.RAPIDAPIKEY   || null;
 
   // Parameters
   let mailSecret    = req.body.secretWord;
@@ -31,33 +33,42 @@ exports.sendMail = function(req,res){
   let pdfFileb64    = req.body.pdfFileb64;
   let xmlFileb64    = req.body.xmlFileb64;
 
-  // Secret word
-  let secretWord  = 'please';
-
-  // Validate parameters
-  if ( clientEmail != null && clientEmail != "" 
-    && clientName != null && clientName != "" 
-    && invoiceType != null && invoiceType != "" 
-    && invoiceNumber != null && invoiceNumber != "" 
-    && invoiceDate != null && invoiceDate != "" 
-    && invoiceAmount != null && invoiceAmount != "" 
-    && senderRuc != null && senderRuc != "" 
-    && senderName != null && senderName != "" 
-    && pdfFileb64 != null && pdfFileb64 != "" 
-    && mailSecret != null) {
+  if (cfgEmailHost      != null 
+      && cfgEmailPort   != null 
+      && cfgSecure      != null 
+      && cfgEmail       != null 
+      && cfgPassword    != null 
+      &&cfgRapidApiUrl  != null 
+      &&cfgRapidApiHost != null 
+      &&cfgRapiApidKey  != null) 
+  {
+    
+    // Validate parameters
+    if (clientEmail       != null && clientEmail    != "" 
+        && clientName     != null && clientName     != "" 
+        && invoiceType    != null && invoiceType    != ""  
+        && invoiceNumber  != null && invoiceNumber  != "" 
+        && invoiceDate    != null && invoiceDate    != "" 
+        && invoiceAmount  != null && invoiceAmount  != "" 
+        && senderRuc      != null && senderRuc      != "" 
+        && senderName     != null && senderName     != "" 
+        && pdfFileb64     != null && pdfFileb64     != "" 
+        && mailSecret     != null) 
+    {
 
       // Validate secret word
-      if (mailSecret == secretWord) {
+      if (mailSecret == cfgsecretWord) {
 
         // Validate email
-        unirest.get("https://pozzad-email-validator.p.rapidapi.com/emailvalidator/validateEmail/"+clientEmail)
-        .header("X-RapidAPI-Host", "pozzad-email-validator.p.rapidapi.com")
-        .header("X-RapidAPI-Key", "9d13af6ee4msh6e89bb4e233c990p109655jsn17dab709beaf")
-        .end(function (result) {
-                  
-          //console.log(result.status, result.headers, result.body);
-
-          if (result.body.isValid) {
+        unirest.get(cfgRapidApiUrl+clientEmail)
+        .header("X-RapidAPI-Host", cfgRapidApiHost)
+        .header("X-RapidAPI-Key", cfgRapiApidKey)
+        .end(function (result) 
+        {
+          
+          // Verify email
+          if (result.body.isValid) 
+          {
 
             // Email settings
             const transporter = nodeMailer.createTransport({
@@ -111,10 +122,10 @@ exports.sendMail = function(req,res){
 
             // Send mail
             const mailOptions = {
-              from    : '"Soporte AHREN S.A.C." <soporte@ahrensac.com>', // sender address
+              from    : '"'+cfgSenderName+'" <'+cfgEmail+'>', // sender address
               to      : clientEmail, // list of receivers, multiple mails separated by commas
-              subject : '[OPENFACT] Emisión de Comprobante Electrónico ', // Subject line
-              text    : 'OPENFACT', // plain text body
+              subject : cfgSubject, // Subject line
+              text    : cfgSenderName, // plain text body
               html    : html_source, // html body
               attachments: [
 
@@ -146,28 +157,24 @@ exports.sendMail = function(req,res){
               }
             });
 
-            //res.json({ success: true , message: "Mensaje Enviado", response: req.body});
-
           } else {
-
             res.json({ success: false , message: "Dirección de correo inválida"});
-
           }
 
         });
 
-      } else {
-        
+      } else {        
         res.json({ success: false , message: "Frase Secreta incorrecta"});
-
       }
 
-  }
-  else{
+    }
+    else{
+      res.json({ success: false , message: 'Verifique los parámetros.'});
+    }
 
-    res.json({ success: false , message: 'Verifique los parámetros.'});
-
+  } else {
+    res.json({ success: false , message: 'No se definieron las variables de entorno.'});
   }
-    
+
 }
   
