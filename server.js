@@ -19,8 +19,6 @@ var app = express();
 
   mailRoutes(app);
 
-  var port = 3000;
-
   app.get('/', function (req, res) {
     res.json({info:"OpenFact Mailer"});
     //res.render('index');
