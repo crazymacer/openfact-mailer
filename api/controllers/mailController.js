@@ -125,13 +125,13 @@ exports.sendMail = function(req,res){
             transporter.sendMail(mailOptions, (error, info) => {
               if (error) {
                 console.log(error);
-                res.json({ success: false , message: "Ocurrió un problema :(.).", response: error});
+                res.json({ success: false , message: "Ocurrió un problema => " + error});
                 //res.status(400).send(error);
               } else {
                 console.log('Message %s sent: %s', info.messageId);
                 //console.log('Message %s sent: %s', info.messageId, info.response);
                 //res.status(200).send(info);
-                res.json({ success: true , message: "Mensaje Enviado", response: info});
+                res.json({ success: true , message: "Mensaje Enviado"});
               }
             });
 
@@ -139,7 +139,7 @@ exports.sendMail = function(req,res){
 
           } else {
 
-            res.json({ success: true , message: "Dirección de correo inválida", response: null});
+            res.json({ success: true , message: "Dirección de correo inválida"});
 
           }
 
@@ -147,7 +147,7 @@ exports.sendMail = function(req,res){
 
       } else {
         
-        res.json({ success: false , message: "Frase Secreta incorrecta", response: null});
+        res.json({ success: false , message: "Frase Secreta incorrecta"});
 
       }
 
