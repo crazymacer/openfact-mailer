@@ -135,7 +135,7 @@ exports.sendMail = function(req,res){
               }
             });
 
-            res.json({ success: true , message: "Mensaje Enviado", response: req.body});
+            //res.json({ success: true , message: "Mensaje Enviado", response: req.body});
 
           } else {
 
