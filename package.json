@@ -4,7 +4,8 @@
   "description": "OpenFact Mailer",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon server",
+    "start": "node server.js",
+    "startb": "nodemon server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Mario César - @CrazyMacer",
