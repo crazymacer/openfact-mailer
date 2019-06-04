@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Nodemailer Email Example</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  </head>
+  <body>
+
+    <div class="container"><br />
+
+      <h1>Send The Email</h1><br />
+
+      <form action="/send-email" method="post" enctype="multipart/form-data">
+
+        <input type="hidden" class="form-control" name="secretWord" value="please">
+        
+        <div class="row">
+          <div class="col-md-4"></div>
+          <div class="form-group col-md-4">
+            <label for="to">Correo Cliente:</label>
+            <input type="email" class="form-control" name="clientEmail" value="macer1991@gmail.com">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4"></div>
+          <div class="form-group col-md-4">
+            <label for="to">Nombre o Razón Social del Cliente:</label>
+            <input type="text" class="form-control" name="clientName" value="Suntec Network">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4"></div>
+          <div class="form-group col-md-4">
+            <label for="subject">Tipo Comprobante:</label>
+            <input type="text" class="form-control" name="invoiceType" value="Factura">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4"></div>
+            <div class="form-group col-md-4">
+              <label for="body">Serie y Número Comprobante:</label>
+              <input type="text" class="form-control" name="invoiceNumber" value="F001-00005">
+            </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4"></div>
+            <div class="form-group col-md-4">
+              <label for="body">Fecha Emisión:</label>
+              <input type="text" class="form-control" name="invoiceDate" value="04/06/2019">
+            </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4"></div>
+            <div class="form-group col-md-4">
+              <label for="body">Monto Total:</label>
+              <input type="text" class="form-control" name="invoiceAmount" value="PEN 1200.00">
+            </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4"></div>
+            <div class="form-group col-md-4">
+              <label for="body">Emisor RUC:</label>
+              <input type="text" class="form-control" name="senderRuc" value="10714525254">
+            </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4"></div>
+            <div class="form-group col-md-4">
+              <label for="body">Emisor:</label>
+              <input type="text" class="form-control" name="senderName" value="CrazyMacer Gaming">
+            </div>
+        </div>
+
+     
+        <textarea name="pdfFileb64" id="" cols="30" rows="10"></textarea>
+        
+        <div class="row">
+          <div class="col-md-4"></div>
+          <div class="form-group col-md-4">
+            <button type="submit" class="btn btn-success">Send</button>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </body>
+</html>
