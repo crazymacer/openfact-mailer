@@ -15,7 +15,7 @@ exports.sendMail = function(req,res){
   const cfgPassword       = process.env.PASSWORD      || null;
   const cfgSenderName     = process.env.SENDERNAME    || 'OPENFACT';
   const cfgSubject        = process.env.SUBJECT       || '[OPENFACT] Emisión de Comprobante Electrónico';
-  const cfgsecretWord     = process.env.SECRETWORD    || 'please';
+  const cfgsecretWord     = process.env.SECRETWORD    || null;
   const cfgRapidApiUrl    = process.env.RAPIDAPIURL   || null;
   const cfgRapidApiHost   = process.env.RAPIDAPIHOST  || null;
   const cfgRapiApidKey    = process.env.RAPIDAPIKEY   || null;
@@ -33,6 +33,7 @@ exports.sendMail = function(req,res){
   let pdfFileb64    = req.body.pdfFileb64;
   let xmlFileb64    = req.body.xmlFileb64;
 
+  // Validad enviroment variables
   if (cfgEmailHost      != null 
       && cfgEmailPort   != null 
       && cfgSecure      != null 
@@ -69,7 +70,6 @@ exports.sendMail = function(req,res){
           // Verify email
           if (result.body.isValid) 
           {
-
             // Email settings
             const transporter = nodeMailer.createTransport({
               host: cfgEmailHost,
@@ -164,7 +164,7 @@ exports.sendMail = function(req,res){
         });
 
       } else {        
-        res.json({ success: false , message: "Frase Secreta incorrecta"});
+        res.json({ success: false , message: "Palabra Secreta incorrecta"});
       }
 
     }
@@ -176,5 +176,4 @@ exports.sendMail = function(req,res){
     res.json({ success: false , message: 'No se definieron las variables de entorno.'});
   }
 
-}
-  
+} 
