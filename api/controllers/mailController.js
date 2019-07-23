@@ -150,7 +150,7 @@ exports.sendMail = function(req,res){
                 res.json({ success: false , message: "Ocurrió un problema => " + error});
                 //res.status(400).send(error);
               } else {
-                console.log('Message %s sent: %s', info.messageId);
+                console.log('Message %s sent to: %s from: %s', info.messageId, mailOptions.to, mailOptions.from);
                 //console.log('Message %s sent: %s', info.messageId, info.response);
                 //res.status(200).send(info);
                 res.json({ success: true , message: "Mensaje Enviado"});

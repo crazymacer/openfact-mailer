@@ -4,12 +4,12 @@ const express     = require('express');
 const path        = require('path');
 const bodyParser  = require('body-parser');
 const mailRoutes  = require('./api/routes/mailRoutes');
-
+const cors        = require('cors');
 // Variables
 const port  = process.env.PORT || 5000;
 
 var app = express();
-      
+app.use(cors());
 app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname,'public')));
 //app.use(bodyParser.urlencoded({extended: true}));
