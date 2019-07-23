@@ -27,6 +27,8 @@ app.get('/', function (req, res) {
 
 app.get('/cool', (req, res) => res.send(cool()))
 
+app.use('/comision', require('./api/controllers/comisionController'));
+
 // Listening
 app.listen(port, function(err){
   if (err) {
