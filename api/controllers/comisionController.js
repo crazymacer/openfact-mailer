@@ -7,31 +7,24 @@ const puppeteer = require('puppeteer');
 const cheerio = require('cheerio');
 const cModel = require('../models/comision.model');
 
-router.post('/sbs', (req, res) => {
-  var date;
+router.post('/sbs', async (req, res) => {
   var arr = [];
   var arrayModel = [];
-
-  puppeteer
-    .launch({
-      'args' : [
-        '--no-sandbox',
-        '--disable-setuid-sandbox'
-      ]
-    })
-    .then(function (browser) {
-      return browser.newPage();
-    })
-    .then(function (page) {
-
-      return page.goto(url).then(async function () {
-        await page.type('#cboPeriodo', req.body.periodo);
-        await page.click('input[type="submit"]');
-        await page.waitForSelector('.JER_filaContenido');
-        return page.content();
+  var date;
+  var periodo = req.body.periodo;
+  try {
+      const browser = await puppeteer.launch({
+        'args': [
+          '--no-sandbox',
+          '--disable-setuid-sandbox'
+        ]
       });
-    })
-    .then(function (html) {
+      const page = await browser.newPage();
+      await page.goto(url);
+      await page.type('#cboPeriodo', periodo);
+      await page.click('input[type="submit"]');
+      await page.waitForSelector('.JER_filaContenido');
+      var html = await page.content();
       const $ = cheerio.load(html);
       $('tr.JER_filaContenido > td').toArray().map(item => {
         arr.push($(item).text().trim())
@@ -77,19 +70,17 @@ router.post('/sbs', (req, res) => {
       var anio = date.substr(0, 4);
       var mes = date.substr(5, 3);
 
-      res.json({
+      res.status(200).send({
         ok: true,
         data: arrayModel,
         anio: anio,
         mes: mes
-      })
+      });
+      await browser.close();
 
-    })
-    .catch(function (err) {
-      console.error("error " + err);
-    });
-
-
+    } catch (error) {
+    console.log("try error " + error);
+  }
 
 });
 
