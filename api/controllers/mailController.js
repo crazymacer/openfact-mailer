@@ -53,15 +53,15 @@ exports.sendMailCustom = function (req, res) {
     };
 
     // Validate email
-    unirest.get(cfgRapidApiUrl + email.data.recipients)
-      .header("X-RapidAPI-Host", cfgRapidApiHost)
-      .header("X-RapidAPI-Key", cfgRapiApidKey)
-      .end(function (result) {
+    // unirest.get(cfgRapidApiUrl + email.data.recipients)
+    //   .header("X-RapidAPI-Host", cfgRapidApiHost)
+    //   .header("X-RapidAPI-Key", cfgRapiApidKey)
+    //   .end(function (result) {
 
-        console.log(result.body);
+        //console.log(result.body);
 
         // Verify email
-        if (result.body.isValid) {
+        //if (result.body.isValid) {
           // Send status
           transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
@@ -74,10 +74,10 @@ exports.sendMailCustom = function (req, res) {
             }
           });
 
-        } else {
-          res.json({ success: false, message: "Dirección de correo inválida" });
-        }
-      });
+        // } else {
+        //   res.json({ success: false, message: "Dirección de correo inválida" });
+        // }
+      //});
   } catch (error) {
     console.log("[ERROR]: " + error);
     res.json({ success: false, error: "" + error });
@@ -140,13 +140,13 @@ exports.sendMail = function (req, res) {
       if (mailSecret == cfgsecretWord) {
 
         // Validate email
-        unirest.get(cfgRapidApiUrl + clientEmail)
-          .header("X-RapidAPI-Host", cfgRapidApiHost)
-          .header("X-RapidAPI-Key", cfgRapiApidKey)
-          .end(function (result) {
+        // unirest.get(cfgRapidApiUrl + clientEmail)
+        //   .header("X-RapidAPI-Host", cfgRapidApiHost)
+        //   .header("X-RapidAPI-Key", cfgRapiApidKey)
+        //   .end(function (result) {
 
-            // Verify email
-            if (result.body.isValid) {
+        //     // Verify email
+        //     if (result.body.isValid) {
               // Email settings
               const transporter = nodeMailer.createTransport({
                 host: cfgEmailHost,
@@ -234,11 +234,11 @@ exports.sendMail = function (req, res) {
                 }
               });
 
-            } else {
-              res.json({ success: false, message: "Dirección de correo inválida" });
-            }
+          //   } else {
+          //     res.json({ success: false, message: "Dirección de correo inválida" });
+          //   }
 
-          });
+          // });
 
       } else {
         res.json({ success: false, message: "Palabra Secreta incorrecta" });
