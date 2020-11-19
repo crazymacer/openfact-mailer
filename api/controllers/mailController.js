@@ -5,9 +5,18 @@ const nodeMailer = require('nodemailer');
 const unirest = require('unirest');
 
 //
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
+
+//
 exports.sendMailCustom = function (req, res) {
 
   try {
+
+    const cfgRapidApiUrl = process.env.RAPIDAPIURL || null;
+    const cfgRapidApiHost = process.env.RAPIDAPIHOST || null;
+    const cfgRapiApidKey = process.env.RAPIDAPIKEY || null;
 
     const email = {
       config: {
@@ -36,30 +45,39 @@ exports.sendMailCustom = function (req, res) {
     });
 
     const mailOptions = {
-      from: '"' +  email.data.senderName + '" <' + email.config.user + '>', // sender address
+      from: '"' + email.data.senderName + '" <' + email.config.user + '>', // sender address
       to: email.data.recipients, // list of receivers, multiple mails separated by commas
       subject: email.data.subject, // Subject line
       text: email.data.senderName, // plain text body
       html: email.data.body, // html body
     };
 
-    // Send status
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.log(error);
-        res.json({ success: false, message: "Ocurrió un problema => " + error });
-        
-      } else {
-        console.log('Message %s sent to: %s from: %s', info.messageId, mailOptions.to, mailOptions.from);        
-        res.json({ success: true, message: "Mensaje Enviado" });
-      }
-    });
+    // Validate email
+    unirest.get(cfgRapidApiUrl + email.data.recipients)
+      .header("X-RapidAPI-Host", cfgRapidApiHost)
+      .header("X-RapidAPI-Key", cfgRapiApidKey)
+      .end(function (result) {
 
+        console.log(result.body);
 
+        // Verify email
+        if (result.body.isValid) {
+          // Send status
+          transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+              console.log(error);
+              res.json({ success: false, message: "Ocurrió un problema => " + error });
 
-    //res.json({ success: true , message: "Operación completada"});
-    res.json({ success: true, data: email });
+            } else {
+              console.log('Message %s sent to: %s from: %s', info.messageId, mailOptions.to, mailOptions.from);
+              res.json({ success: true, message: "Mensaje Enviado" });
+            }
+          });
 
+        } else {
+          res.json({ success: false, message: "Dirección de correo inválida" });
+        }
+      });
   } catch (error) {
     console.log("[ERROR]: " + error);
     res.json({ success: false, error: "" + error });
