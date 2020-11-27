@@ -5,7 +5,7 @@ const nodeMailer = require('nodemailer');
 const emailService = {};
 
 // Envio de Correos con la configuración enviada
-emailService.sendCustom = (email, res) => {
+emailService.sendCustom = (email) => {
 
     try {
         // Email Config

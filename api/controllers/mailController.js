@@ -41,7 +41,7 @@ exports.sendMailCustom = async (req, res) => {
     }
 
     // Response
-    return res.json({ succes: resSuccess, message: resMessage });
+    return res.json({ success: resSuccess, message: resMessage });
 
   } catch (error) {
     return res.json({ success: false, message: 'Ocurrió una excepción. ' + error });
