@@ -1,10 +1,11 @@
 // Required modules
-const cool        = require('cool-ascii-faces');
-const express     = require('express');
-const path        = require('path');
-const bodyParser  = require('body-parser');
-const mailRoutes  = require('./api/routes/mailRoutes');
-const cors        = require('cors');
+const cool              = require('cool-ascii-faces');
+const express           = require('express');
+const path              = require('path');
+const bodyParser        = require('body-parser');
+const mailRoutes        = require('./api/routes/mailRoutes');
+const blacklistRoutes   = require('./api/routes/blacklistRoutes');
+const cors              = require('cors');
 // Variables
 const port  = process.env.PORT || 5000;
 
@@ -19,6 +20,8 @@ app.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:500
 
 // Routes
 mailRoutes(app);
+blacklistRoutes(app);
+
 
 app.get('/', function (req, res) {
   res.json({info:"OpenFact Mailer"});
