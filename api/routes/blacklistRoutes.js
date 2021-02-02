@@ -8,4 +8,10 @@ module.exports = function (app) {
 
     app.route('/blacklist/remove-email')
         .post(blacklistController.removeBlacklist);
+
+    app.route('/blacklist/add-ruc')
+        .post(blacklistController.addBlacklistRuc);
+
+    app.route('/blacklist/remove-ruc')
+        .post(blacklistController.removeBlacklistRuc);
 };

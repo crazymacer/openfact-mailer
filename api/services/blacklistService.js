@@ -67,5 +67,68 @@ blacklistService.removeEmail = async (email) => {
     }
 }
 
+blacklistService.isBlacklistedRuc = async (ruc) => {
+
+    try {
+        let isBlocked = false;
+
+        // Database Query
+        const validateEmailQuery = 'SELECT * from blacklistRuc WHERE ruc = $1';
+        const { rows } = await dbQuery.query(validateEmailQuery, [ruc]);
+        const dbResponse = rows[0];
+
+        // Check if Exist
+        if (dbResponse) {
+            isBlocked = true;
+        }
+
+        return isBlocked;
+
+    } catch (error) {
+        throw `No se pudo consultar el servicio de blacklist`;
+    }
+}
+
+blacklistService.addRuc = async (ruc, razonSocial = "") => {
+
+    try {
+
+        // Database Query
+        const insertQuery = `INSERT INTO
+        blacklistRuc(ruc, razonSocial)
+          VALUES($1, $2)
+          returning *`;
+
+        const values = [ruc, razonSocial];
+        const isAlredyAdded = await blacklistService.isBlacklistedRuc(ruc);
+
+        if (!isAlredyAdded) {
+            const { rows } = await dbQuery.query(insertQuery, values);
+            const dbResponse = rows[0];
+        }
+
+        return true;
+
+    } catch (error) {
+        throw `No se pudo agregar el correo al blacklist. Motivo:${error}`;
+    }
+}
+
+blacklistService.removeRuc = async (ruc) => {
+
+    try {
+        // Database Query
+        const deleteQuery = 'DELETE FROM blacklistRuc WHERE ruc=$1 returning *';
+        const values = [ruc];
+
+        const { rows } = await dbQuery.query(deleteQuery, values);
+        const dbResponse = rows[0];
+
+        return true;
+    } catch (error) {
+        throw `No se pudo agregar el correo al blacklist. Motivo:${error}`;
+    }
+}
+
 // Export
 module.exports = blacklistService;
